@@ -1,0 +1,42 @@
+services:
+  database:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todo
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    profiles:
+      - local
+    
+  api:
+    container_name: api
+    build: ./aws-todo-back
+    command: sh -c "sleep 10 && uvicorn main:app --reload --port=8000 --host=0.0.0.0"
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@database:5432/todo}
+    # env_file:
+    #   - aws-todo-back/.env
+    depends_on:
+      database:
+        condition: service_started
+        required: false
+    restart: unless-stopped
+    
+  web:
+    build: ./aws-todo-front
+    container_name: web
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  db_data:
