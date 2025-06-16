@@ -197,6 +197,16 @@ Use `jumpfile.sh` for deployment commands:
 
 ---
 
+## 🛠️ How To Continue
+
+The main focus is the infrastructure setup, so no further development is planned for the frontend or backend. For the next steps, I would:
+
+- Divide the project into separate repositories for frontend, backend, and infrastructure.
+- Put the frontend into a S3 bucket, since it is a static site and does not make heavy calculations.
+- Create a CI/CD pipeline for automated deployments.
+
+---
+
 ## 📄 License
 
 [MIT](https://choosealicense.com/licenses/mit/)
